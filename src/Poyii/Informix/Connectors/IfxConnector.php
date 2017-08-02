@@ -83,9 +83,7 @@ class IfxConnector extends Connector implements ConnectorInterface
 
     protected function getDsnOption(array $config)
     {
-        $options = '';
-        if(isset($config['onsoctcp'])) $options.=" protocol={$config['onsoctcp']};";
-        else $options.=' protocol=onsoctcp;';
+        $options = "protocol=".Arr::get($config, "onsoctcp", "onsoctcp").";";
 
         if(isset($config['db_locale'])) $options.=" DB_LOCALE={$config['db_locale']};";
         if(isset($config['client_locale'])) $options.=" CLIENT_LOCALE={$config['client_locale']};";
