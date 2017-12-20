@@ -89,8 +89,8 @@ class IfxConnection extends Connection
 //            return $value;
 //        }
 //        Log::debug("encoding: ".$in_encoding." value ".$value);
-        return mb_convert_encoding(trim($value), $out_encoding);
-        //return iconv($in_encoding, "{$out_encoding}//IGNORE", trim($value));
+        //return mb_convert_encoding(trim($value), $out_encoding);
+        return iconv($in_encoding, "{$out_encoding}//IGNORE", trim($value));
     }
 
     public function select($query, $bindings = [], $useReadPdo = true)
