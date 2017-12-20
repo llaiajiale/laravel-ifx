@@ -20,7 +20,7 @@ Add `poyii/laravel-ifx` as a requirement to composer.json:
 ```
 And then run `composer update`
 
-Once Composer has installed or updated your packages you need to register OracleDB. Open up `config/app.php` and find
+Once Composer has installed or updated your packages you need to register Informix DB. Open up `config/app.php` and find
 the `providers` key and add:
 
 ```php
