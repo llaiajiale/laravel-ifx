@@ -75,6 +75,10 @@ class IfxGrammar extends Grammar {
 
         $components = $this->compileComponents($query);
 
+        if(key_exists("lock", $components)){
+            unset($components["orders"]);
+        }
+
         return trim($this->concatenate($components));
     }
 
