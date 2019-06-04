@@ -44,7 +44,7 @@ class InformixDBServiceProvider extends ServiceProvider
 
             foreach ($connection_keys as $key) {
                 $this->app['db']->extend($key, function ($config) {
-                    $oConnector = new Connectors\IfxConnector();
+                    $oConnector = new Connectors\IfxConnector($this->app['encrypter']);
                     $connection = $oConnector->connect($config);
                     return new IfxConnection($connection, $config['database'], $config['prefix'], $config);
                 });

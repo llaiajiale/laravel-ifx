@@ -2,6 +2,7 @@
 
 namespace Poyii\Informix\Connectors;
 
+use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Database\Connectors\Connector;
 use Illuminate\Database\Connectors\ConnectorInterface;
 use PDO;
@@ -11,6 +12,7 @@ use Exception;
 
 class IfxConnector extends Connector implements ConnectorInterface
 {
+    protected $encrypter;
 
     /**
      * The PDO connection options.
@@ -22,10 +24,27 @@ class IfxConnector extends Connector implements ConnectorInterface
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     ];
 
+    /**
+     * IfxConnector constructor.
+     * @param $encrypter
+     */
+    public function __construct(Encrypter $encrypter)
+    {
+        $this->encrypter = $encrypter;
+    }
+
     public function createConnection($dsn, array $config, array $options)
     {
         $username = Arr::get($config, 'username');
         $password = Arr::get($config, 'password');
+
+        if($this->encrypter && strlen($password) > 50){
+            if(starts_with("base64:", $password)){
+                $password = $this->encrypter->decrypt(substr($password, 7));
+            } else {
+                $password = $this->encrypter->decrypt($password);
+            }
+        }
 
         try {
             $pdo = new \PDO($dsn, $username, $password, $options);
