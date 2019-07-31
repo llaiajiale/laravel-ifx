@@ -8,6 +8,7 @@ namespace Poyii\Informix;
  * Time: 14:34
  */
 use Illuminate\Database\Connection;
+use Illuminate\Database\Eloquent\Model;
 use Poyii\Informix\Query\Processors\IfxProcessor;
 use Poyii\Informix\Query\Grammars\IfxGrammar as QueryGrammar;
 use Poyii\Informix\Schema\Grammars\IfxGrammar as SchemaGrammar;
@@ -104,7 +105,16 @@ class IfxConnection extends Connection
                 $client_encoding = $this->getConfig('client_encoding');
                 if(is_array($results) || is_object($results)){
                     foreach($results as &$result){
-                        if(is_array($result) || is_object($result)){
+                        if(is_subclass_of($result, Model::class)){
+                            $attributes = $result->getAttributes();
+                            foreach($attributes as $key=>$value){
+                                if(is_string($value)){
+                                    $value = $this->convertCharset($db_encoding, $client_encoding, $value);
+                                    $result->$key = $value;
+                                    $result->syncOriginalAttribute($key);
+                                }
+                            }
+                        } else if(is_array($result) || is_object($result)){
                             foreach($result as $key=>&$value){
                                 if(is_string($value)){
                                     $value = $this->convertCharset($db_encoding, $client_encoding, $value);
