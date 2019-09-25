@@ -13,7 +13,6 @@ use Poyii\Informix\Query\Grammars\IfxGrammar as QueryGrammar;
 use Poyii\Informix\Schema\Grammars\IfxGrammar as SchemaGrammar;
 use Poyii\Informix\Schema\IfxBuilder as SchemaBuilder;
 use DateTimeInterface;
-use Illuminate\Support\Facades\Log;
 
 class IfxConnection extends Connection
 {
@@ -88,15 +87,13 @@ class IfxConnection extends Connection
 //        {
 //            return $value;
 //        }
-//        Log::debug("encoding: ".$in_encoding." value ".$value);
+//        \Log::debug("encoding: ".$in_encoding." value ".$value);
         //return mb_convert_encoding(trim($value), $out_encoding);
         return iconv($in_encoding, "{$out_encoding}//IGNORE", trim($value));
     }
 
     public function select($query, $bindings = [], $useReadPdo = true)
     {
-        if(config("app.debug"))
-            Log::debug("query: ".$query." with ".implode(', ', $bindings));
         $results = parent::select($query, $bindings, $useReadPdo);
         if($this->isTransEncoding()){
             if($results){
@@ -146,8 +143,6 @@ class IfxConnection extends Connection
     public function statement($query, $bindings = [])
     {
 
-        if(config("app.debug"))
-            Log::debug("statement: ".$query." with ".implode(', ', $bindings));
         return $this->run($query, $bindings, function ($me, $query, $bindings) {
             if ($me->pretending()) {
                 return true;
@@ -187,8 +182,6 @@ class IfxConnection extends Connection
 
     public function affectingStatement($query, $bindings = [])
     {
-        if(config("app.debug"))
-            Log::debug("affectingStatement: ".$query." with ".implode(', ', $bindings));
         return parent::affectingStatement($query, $bindings);
     }
 
