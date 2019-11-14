@@ -3,7 +3,7 @@
   "description": "Informix DB driver for Laravel 5",
   "keywords": ["informix", "laravel", "laravel 5", "ifx" ],
   "license": "MIT",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "authors": [
     {
       "name": "llaiayumi",
@@ -15,7 +15,8 @@
     "illuminate/support": "5.2.*",
     "illuminate/database": "5.2.*",
     "illuminate/pagination": "5.2.*",
-    "illuminate/encryption": "5.2.*"
+    "illuminate/encryption": "5.2.*",
+    "guzzlehttp/guzzle": "6.2.*"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",

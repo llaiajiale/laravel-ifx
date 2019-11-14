@@ -96,8 +96,6 @@ class IfxConnection extends Connection
 
     public function select($query, $bindings = [], $useReadPdo = true)
     {
-        if(config("app.debug"))
-            Log::debug("query: ".$query." with ".implode(', ', $bindings));
         $results = parent::select($query, $bindings, $useReadPdo);
         if($this->isTransEncoding()){
             if($results){
@@ -156,8 +154,6 @@ class IfxConnection extends Connection
     public function statement($query, $bindings = [])
     {
 
-        if(config("app.debug"))
-            Log::debug("statement: ".$query." with ".implode(', ', $bindings));
         return $this->run($query, $bindings, function ($me, $query, $bindings) {
             if ($me->pretending()) {
                 return true;
@@ -197,8 +193,6 @@ class IfxConnection extends Connection
 
     public function affectingStatement($query, $bindings = [])
     {
-        if(config("app.debug"))
-            Log::debug("affectingStatement: ".$query." with ".implode(', ', $bindings));
         return parent::affectingStatement($query, $bindings);
     }
 

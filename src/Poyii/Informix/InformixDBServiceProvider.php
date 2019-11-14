@@ -8,6 +8,7 @@
 
 namespace Poyii\Informix;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 /**
  * Class InformixDBServiceProvider.
@@ -44,9 +45,14 @@ class InformixDBServiceProvider extends ServiceProvider
 
             foreach ($connection_keys as $key) {
                 $this->app['db']->extend($key, function ($config) {
-                    $oConnector = new Connectors\IfxConnector($this->app['encrypter']);
-                    $connection = $oConnector->connect($config);
-                    return new IfxConnection($connection, $config['database'], $config['prefix'], $config);
+                    $driver = Arr::get($config, "driver", "informix");
+                    if($driver === "informix"){
+                        $oConnector = new Connectors\IfxConnector($this->app['encrypter']);
+                        $connection = $oConnector->connect($config);
+                        return new IfxConnection($connection, $config['database'], $config['prefix'], $config);
+                    } else if($driver === "informix-json") {
+                        return new IfxJsonConnection($config);
+                    }
                 });
             }
         }
