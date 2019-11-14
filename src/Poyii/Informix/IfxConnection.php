@@ -14,7 +14,6 @@ use Poyii\Informix\Query\Grammars\IfxGrammar as QueryGrammar;
 use Poyii\Informix\Schema\Grammars\IfxGrammar as SchemaGrammar;
 use Poyii\Informix\Schema\IfxBuilder as SchemaBuilder;
 use DateTimeInterface;
-use Illuminate\Support\Facades\Log;
 
 class IfxConnection extends Connection
 {
@@ -89,7 +88,7 @@ class IfxConnection extends Connection
 //        {
 //            return $value;
 //        }
-//        Log::debug("encoding: ".$in_encoding." value ".$value);
+//        \Log::debug("encoding: ".$in_encoding." value ".$value);
         //return mb_convert_encoding(trim($value), $out_encoding);
         return iconv($in_encoding, "{$out_encoding}//IGNORE", trim($value));
     }
