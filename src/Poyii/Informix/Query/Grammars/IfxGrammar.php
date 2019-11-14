@@ -35,16 +35,18 @@ class IfxGrammar extends Grammar {
             return;
         }
 
-        $select = $query->distinct ? 'select distinct ' : 'select ';
 
-        if($query->offset > 0){
+        $select = 'select';
+
+        if ($query->offset > 0) {
             $select.=' skip '. (int)$query->offset;
         }
 
-        if ($query->limit > 0 ) {
+        if ($query->limit > 0) {
             $select.= ' first '.(int)$query->limit;
         }
 
+        $select .= $query->distinct ? ' distinct' : '';
 
         return $select.' '.$this->columnize($columns);
     }
