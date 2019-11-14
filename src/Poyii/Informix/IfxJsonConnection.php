@@ -222,7 +222,9 @@ class IfxJsonConnection extends Connection implements ConnectionInterface
             Log::debug("the sql is ${sql}");
         }
 
-        $response = $client->get($uri, [ "query"=> [ "action" => "queryList", "source" => $source,
+        $response = $client->get($uri, [
+            "header" =>[ "Content-Type"=> "application/json; charset=utf-8",],
+            "query"=> [ "action" => "queryList", "source" => $source,
             "_token"=>$token, "sql"=> $sql,
         ] ]);
 
@@ -236,15 +238,7 @@ class IfxJsonConnection extends Connection implements ConnectionInterface
         if($json){
             $results = json_decode($json);
             if(is_array($results)){
-                foreach ($results as &$result){
-                    foreach ($result as $key =>&$value){
-                        if($value){
-                            if(is_string($value) && substr($value, 0, 1) == '%'){
-                                $value = urldecode($value);
-                            }
-                        }
-                    }
-                }
+                $results = $this->parseResult($results);
             }
             return $results;
         }
@@ -253,18 +247,16 @@ class IfxJsonConnection extends Connection implements ConnectionInterface
     }
 
     protected function parseResult($results){
-        if(!$results) return;
+        if(!$results) return $results;
         foreach ($results as &$result){
-            foreach ($result as $key =>&$value){
-                if(!$value) continue;
-                if(is_array($value)){
-                    $value = $this->parseResult($value);
-                } else if(is_object($value)){
-                    $value = $this->parseResult($value);
-                } else if(is_string($value)){
-                    if(substr($value, 0, 1) == '%'){
-                        $value = urldecode($value);
-                    }
+            if(!$result) continue;
+            if(is_array($result)){
+                $result = $this->parseResult($result);
+            } else if(is_object($result)){
+                $result = $this->parseResult($result);
+            } else if(is_string($result)){
+                if(substr($result, 0, 1) == '%'){
+                    $result = rawurldecode($result);
                 }
             }
         }
