@@ -22,4 +22,11 @@ return [
         'client_encoding' => 'UTF-8',
         'prefix'    => ''
     ],
+
+    'informix-source-json' => [
+        'driver'    => 'informix-json',
+        'uri'      => 'http://XX.X.XX.XX:9999/json',
+        'source'  => 'source',
+        'token'  => 'SDL3490FI2902309DSFK203SDKL2334202',
+    ],
 ];
