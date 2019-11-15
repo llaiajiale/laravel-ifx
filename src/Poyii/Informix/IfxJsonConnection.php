@@ -255,8 +255,8 @@ class IfxJsonConnection extends Connection implements ConnectionInterface
             } else if(is_object($result)){
                 $result = $this->parseResult($result);
             } else if(is_string($result)){
-                if(substr($result, 0, 1) == '%'){
-                    $result = rawurldecode($result);
+                if(strpos($result, '%') !== false){
+                    $result = urldecode($result);
                 }
             }
         }
